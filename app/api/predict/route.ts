@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || 'http://localhost:5000';
+const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || 'https://web-production-b607.up.railway.app';
 
 type ModelResponse = {
   model: string;
