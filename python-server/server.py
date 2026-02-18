@@ -133,3 +133,9 @@ def predict():
 def health():
     return jsonify({'status': 'healthy', 'models_loaded': [k for k, v in MODELS.items() if v['model'] is not None]})
 
+if __name__ == '__main__':
+    print("Starting AI Model Inference Server...")
+    print("Available models:", list(MODELS.keys()))
+    
+    port = int(os.environ.get("PORT", 10000))  # Render provides PORT automatically
+    app.run(host='0.0.0.0', port=port)
