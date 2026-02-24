@@ -5,16 +5,16 @@ const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || 'http://localhost:500
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const image = formData.get('image');
-    const models = formData.get('models'); // comma-separated list
+    const archive = formData.get('archive');
+    const models = formData.get('models');
 
-    if (!image) return NextResponse.json({ error: 'No image provided' }, { status: 400 });
+    if (!archive) return NextResponse.json({ error: 'No ZIP file provided' }, { status: 400 });
 
     const pf = new FormData();
-    pf.append('image', image);
+    pf.append('archive', archive);
     pf.append('models', String(models || 'MobileNetV2'));
 
-    const response = await fetch(`${PYTHON_SERVER_URL}/predict`, {
+    const response = await fetch(`${PYTHON_SERVER_URL}/batch-predict`, {
       method: 'POST',
       body: pf,
     });
