@@ -7,6 +7,8 @@ interface Result {
     output: string;
     confidence: number;
     latency: number;
+    top_3?: Array<{ label: string, confidence: number }>;
+    overlay_image?: string;
 }
 
 interface ResultsDisplayProps {
@@ -69,6 +71,34 @@ export default function ResultsDisplay({ result, loading }: ResultsDisplayProps)
                         </div>
                     </div>
                 </div>
+
+                {result.overlay_image && (
+                    <div className="pt-4 mt-2 border-t border-slate-100 dark:border-slate-700">
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide font-medium text-[10px]">Segmentation Mask</p>
+                        <div className="w-full relative aspect-square rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+                            <img src={`data:image/png;base64,${result.overlay_image}`} alt="Segmentation Result" className="w-full h-full object-contain" />
+                        </div>
+                    </div>
+                )}
+
+                {result.top_3 && result.top_3.length > 0 && (
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide font-medium text-[10px]">Top-3 Predictions</p>
+                        <div className="space-y-2">
+                            {result.top_3.map((t, idx) => (
+                                <div key={idx} className="flex items-center justify-between text-sm">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-slate-400 dark:text-slate-500 font-mono text-xs">{idx + 1}.</span>
+                                        <span className="font-semibold text-slate-700 dark:text-slate-300">{t.label}</span>
+                                    </div>
+                                    <span className="text-slate-500 font-mono text-xs bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">
+                                        {(t.confidence * 100).toFixed(1)}%
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
