@@ -346,7 +346,67 @@ MODEL_REGISTRY = {
         "session":     None,
         "note":        "Binary segmentation — background vs tumor pixels.",
     },
-
+"squeezenet_lc25000": {
+    "name":        "SqueezeNet — LC25000",
+     
+    "description": "Lung & Colon cancer classification — 5 classes",
+    "type":        "classification",
+    "onnx_file":   "squeezenet_lc25000.onnx",
+    "input_size":  (224, 224),
+     "input_format": "nchw",
+    "params_m":    0.75,
+    "model_mb":    2.8,
+    "session":     None,
+    "classes":     ["lung_aca", "lung_n", "lung_scc", "colon_aca", "colon_n"],
+    "labels": {
+        "lung_aca":  "Lung Adenocarcinoma",
+        "lung_n":    "Lung Benign",
+        "lung_scc":  "Lung Squamous Cell Carcinoma",
+        "colon_aca": "Colon Adenocarcinoma",
+        "colon_n":   "Colon Benign",
+    },
+    "risk": {
+        "lung_aca":  {"level": "HIGH",     "score": 85},
+        "lung_scc":  {"level": "HIGH",     "score": 80},
+        "colon_aca": {"level": "HIGH",     "score": 80},
+        "lung_n":    {"level": "LOW",      "score": 10},
+        "colon_n":   {"level": "LOW",      "score": 10},
+    },
+    "note": "Trained on LC25000 dataset. Lung & colon histology slides only.",
+},
+"mobilenetv3_isic2019": {
+    "name":         "MobileNetV3 — ISIC 2019",
+    "description":  "Skin lesion classification — 8 classes",
+    "type":         "classification",
+    "onnx_file":    "mobilenetv3_isic2019.onnx",
+    "input_size":   (224, 224),
+    "input_format": "nchw",
+    "params_m":     5.4,
+    "model_mb":     16.0,
+    "session":      None,
+    "classes":      ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"],
+    "labels": {
+        "MEL":  "Melanoma",
+        "NV":   "Melanocytic Nevus (benign)",
+        "BCC":  "Basal Cell Carcinoma",
+        "AK":   "Actinic Keratosis",
+        "BKL":  "Benign Keratosis",
+        "DF":   "Dermatofibroma",
+        "VASC": "Vascular Lesion",
+        "SCC":  "Squamous Cell Carcinoma",
+    },
+    "risk": {
+        "MEL":  {"level": "HIGH",     "score": 90},
+        "BCC":  {"level": "HIGH",     "score": 80},
+        "SCC":  {"level": "HIGH",     "score": 80},
+        "AK":   {"level": "MODERATE", "score": 55},
+        "NV":   {"level": "LOW",      "score": 10},
+        "BKL":  {"level": "LOW",      "score": 15},
+        "DF":   {"level": "LOW",      "score": 10},
+        "VASC": {"level": "MODERATE", "score": 40},
+    },
+    "note": "Trained on ISIC 2019. Skin dermoscopy images only.",
+},
     # ── EfficientNet (add when you have the .onnx file) ──────────────────────
     # "efficientnet_b0": {
     #     "name":       "EfficientNet-B0 — Medical",
@@ -487,7 +547,6 @@ def system_metrics() -> dict:
         "cpu_percent": round(psutil.cpu_percent(interval=0.1), 1),
     }
 
-
 def run_classification(session: ort.InferenceSession, cfg: dict, file_bytes: bytes) -> dict:
     """
     Run a classification ONNX model and return full metrics.
@@ -496,9 +555,9 @@ def run_classification(session: ort.InferenceSession, cfg: dict, file_bytes: byt
     t0 = time.time()
 
     input_name = session.get_inputs()[0].name
-    img_arr = preprocess(file_bytes, target_size=cfg["input_size"], mode="nhwc")
-
-    raw_output = session.run(None, {input_name: img_arr})[0][0]  # shape: (num_classes,)
+    mode = cfg.get("input_format", "nhwc")          # ← indented 4 spaces
+    img_arr = preprocess(file_bytes, target_size=cfg["input_size"], mode=mode)  # ← indented 4 spaces
+    raw_output = session.run(None, {input_name: img_arr})[0][0]
 
     # If output looks like raw logits (not probabilities), apply softmax
     if raw_output.min() < 0 or raw_output.max() > 1.0:
