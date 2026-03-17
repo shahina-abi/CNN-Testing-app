@@ -921,6 +921,7 @@ const AVAILABLE_MODELS: ModelSpec[] = [
   { id: "unet_segmentation", name: "U-Net — Tumor Segmentation", params_m: 31.0, ram_mb: 300, cancer_types: ["Multi-cancer"] },
   { id: "squeezenet_lc25000", name: "SqueezeNet — Lung & Colon", params_m: 0.75, ram_mb: 75, cancer_types: ["Lung", "Colon"] },
   { id: "mobilenetv3_isic2019", name: "MobileNetV3 — Skin Cancer", params_m: 5.4, ram_mb: 200, cancer_types: ["Skin"] },
+  { id: "efficientnetv2_breast", name: "EfficientNetV2 — Breast Cancer", params_m: 21.5, ram_mb: 250, cancer_types: ["Breast"] },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────

@@ -407,6 +407,27 @@ MODEL_REGISTRY = {
     },
     "note": "Trained on ISIC 2019. Skin dermoscopy images only.",
 },
+"efficientnetv2_breast": {
+    "name":         "EfficientNetV2 — Breast Cancer",
+    "description":  "Breast cancer classification — Benign vs Malignant",
+    "type":         "classification",
+    "onnx_file":    "efficientnetv2_breast.onnx",
+    "input_size":   (224, 224),
+    "input_format": "nchw",
+    "params_m":     21.5,
+    "model_mb":     76.8,
+    "session":      None,
+    "classes":      ["benign", "malignant"],
+    "labels": {
+        "benign":    "Benign (Non-cancerous)",
+        "malignant": "Malignant (Cancerous)",
+    },
+    "risk": {
+        "benign":    {"level": "LOW",  "score": 10},
+        "malignant": {"level": "HIGH", "score": 90},
+    },
+    "note": "Trained on BreastMNIST. Ultrasound images — benign vs malignant.",
+},
     # ── EfficientNet (add when you have the .onnx file) ──────────────────────
     # "efficientnet_b0": {
     #     "name":       "EfficientNet-B0 — Medical",
