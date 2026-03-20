@@ -922,6 +922,9 @@ const AVAILABLE_MODELS: ModelSpec[] = [
   { id: "squeezenet_lc25000", name: "SqueezeNet — Lung & Colon", params_m: 0.75, ram_mb: 75, cancer_types: ["Lung", "Colon"] },
   { id: "mobilenetv3_isic2019", name: "MobileNetV3 — Skin Cancer", params_m: 5.4, ram_mb: 200, cancer_types: ["Skin"] },
   { id: "efficientnetv2_breast", name: "EfficientNetV2 — Breast Cancer", params_m: 21.5, ram_mb: 250, cancer_types: ["Breast"] },
+  { id: "resnet50_organmnist",    name: "ResNet50 — CT Organ",        params_m: 25.0, ram_mb: 200, cancer_types: ["CT/MRI"] },
+{ id: "resnet50_nodulemnist",   name: "ResNet50 — CT Lung Nodule",  params_m: 25.0, ram_mb: 200, cancer_types: ["Lung"] },
+{ id: "densenet121_chestmnist", name: "DenseNet121 — Chest X-ray",  params_m: 8.0,  ram_mb: 150, cancer_types: ["Chest"] },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
